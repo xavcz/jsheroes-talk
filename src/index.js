@@ -1,6 +1,7 @@
 // Import React
 import React from "react";
 import { graphql, gql } from "react-apollo";
+import history from "history";
 
 // Import Spectacle Core tags
 import {
@@ -29,8 +30,13 @@ import preloader from "spectacle/lib/utils/preloader";
 const images = {
   relay: require("../assets/relay.svg"),
   apollo: require("../assets/apollo.svg"),
-  kadira: require("../assets/kadira.png"),
-  okgrow: require("../assets/okgrow.svg")
+  // kadira: require("../assets/kadira.png"), /* big up kadira 🎩 */
+  okgrow: require("../assets/okgrow.svg"),
+  schema1: require("../assets/schema-1.png"),
+  schema2: require("../assets/schema-2.png"),
+  schema3: require("../assets/schema-3.png"),
+  schema4: require("../assets/schema-4.png"),
+  twitter: require("../assets/twitter.png")
 };
 
 preloader(images);
@@ -57,7 +63,7 @@ const theme = createTheme(
   }
 );
 
-// lol
+// lol 🙄
 const arrayToRows = array =>
   array.reduce(
     (table, value, index) => {
@@ -102,16 +108,45 @@ class Presentation extends React.Component {
         transitionDuration={500}
         theme={theme}
         bgColor="primary"
+        progress="none"
       >
         <Slide transition={["fade"]}>
-          <Heading size={1} caps lineHeight={1} textColor="magenta">
+          <Heading size={1} lineHeight={1}>
             👋
+          </Heading>
+          <Heading size={5} lineHeight={1} textColor="gold">
+            @xav_cz
           </Heading>
           <Appear>
             <Heading size={2} bold lineHeight={1} textColor="magenta">
               GraphQL?
             </Heading>
           </Appear>
+        </Slide>
+        <Slide transition={["fade"]}>
+          <AnimatedGraphQL size="40vw" />
+        </Slide>
+        <Slide transition={["fade"]}>
+          <Heading size={1} caps lineHeight={1}>
+            ❤️
+          </Heading>
+          <Heading size={5} lineHeight={1} textColor="gray">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                flex: 1
+              }}
+            >
+              <span>I use&nbsp;</span>
+              <span style={{ color: "#E10098" }}>GraphQL</span>
+              <span>&nbsp;daily</span>
+            </div>
+          </Heading>
+          <Link href="https://www.okgrow.com" target="_blank">
+            <Image src={images.okgrow} height="5.88rem" width="auto" />
+          </Link>
         </Slide>
         <Slide transition={["fade"]}>
           <Heading size={3} lineHeight={1} textColor="magenta">
@@ -145,6 +180,38 @@ class Presentation extends React.Component {
             SW API
           </Heading>
           <Heading size={3} lineHeight={1} textColor="grey">
+            REST 🤔
+          </Heading>
+        </Slide>
+        <Slide transition={["fade"]} align="center flex-start">
+          <Heading size={3} lineHeight={1} textColor="gold">
+            SW API
+          </Heading>
+          <Image src={images.schema1} />
+        </Slide>
+        <Slide transition={["fade"]} align="center flex-start">
+          <Heading size={3} lineHeight={1} textColor="gold">
+            SW API
+          </Heading>
+          <Image src={images.schema2} />
+        </Slide>
+        <Slide transition={["fade"]} align="center flex-start">
+          <Heading size={3} lineHeight={1} textColor="gold">
+            SW API
+          </Heading>
+          <Image src={images.schema3} />
+        </Slide>
+        <Slide transition={["fade"]} align="center flex-start">
+          <Heading size={3} lineHeight={1} textColor="gold">
+            SW API
+          </Heading>
+          <Image src={images.schema4} />
+        </Slide>
+        <Slide transition={["fade"]}>
+          <Heading size={1} lineHeight={1} textColor="gold">
+            SW API
+          </Heading>
+          <Heading size={3} lineHeight={1} textColor="grey">
             REST 🖐
           </Heading>
         </Slide>
@@ -171,9 +238,11 @@ class Presentation extends React.Component {
               query={`{
   hero(episode: EMPIRE) {
     name
+    starships {
+      name
+    }
     friends {
       name
-      appearsIn
       starships {
         name
       }
@@ -208,14 +277,22 @@ class Presentation extends React.Component {
             📝
           </Heading>
         </Slide>
-        <Slide transition={["fade"]} align="center flex-start">
-          <Heading size={3} lineHeight={1} textColor="magenta" margin="40px 0">
-            Schema === TRUTH
-          </Heading>
+        <Slide transition={["fade"]} align="flex-start flex-start">
           <CodePane
             lang="graphql"
             source={`type Query {
   hero(episode: Episode): Character
+  starship(id: ID!): Starship
+  # ...
+}
+
+type Mutation {
+  createHero(name: String!): Character!
+  makeFriends(
+    heroId: ID!,
+    friendId: ID!
+  ): [Character!]
+  # ...
 }
 
 type Character {
@@ -224,8 +301,9 @@ type Character {
   friends: [Character]
   appearsIn: [Episode]!
   starships: [Starship]
-}`}
-            textSize={24}
+}
+`}
+            textSize={22}
           />
         </Slide>
         <Slide transition={["fade"]} align="center center">
@@ -252,32 +330,39 @@ type Character {
             </TableBody>
           </Table>
         </Slide>
-        <Slide transition={["fade"]} align="center flex-start">
-          <Heading size={3} lineHeight={1} textColor="magenta" margin="40px 0">
-            data = fn(schema)
-          </Heading>
+        <Slide transition={["fade"]} align="flex-start flex-start">
           <CodePane
             lang="js"
             source={`const resolvers = {
   Query: {
     async hero(root, { episode }, context) {
-      return await Character.find({ episode });
+      return await Character.find({ 
+        type: 'hero',
+        episode 
+      });
     },
   },
   Character: {
     async starships(character) {
-      // return from fetch intergalactic API ⛅
+      const res = await fetch(
+        \`https://api.ships.io/pilots/$\{character.id\}\`
+      );
+      return await res.json();
     }
-  },`}
+  },
+  // ...
+}`}
             textSize={24}
           />
         </Slide>
         <Slide transition={["fade"]}>
-          <Heading size={1} lineHeight={1} margin="0 0 40px 0">
-            🤔
-          </Heading>
-          <Heading fit lineHeight={1} textColor="magenta" margin="0 0 40px 0">
-            server = fn(schema, resolvers)
+          <Heading
+            size={3}
+            lineHeight={1}
+            margin="0 0 20px 0"
+            textColor="magenta"
+          >
+            GraphQL Server 🤔
           </Heading>
           <Table>
             <TableBody>
@@ -287,6 +372,16 @@ type Character {
                     lang="graphql"
                     source={`type Query {
   hero(episode: Episode): Character
+  starship(id: ID!): Starship
+  # ...
+}
+
+type Mutation {
+  createHero(name: String!): Character!
+  makeFriends(
+    heroId: ID!,
+    friendId: ID!
+  ): [Character!]
 }
 
 type Character {
@@ -305,20 +400,34 @@ type Character {
                     source={`const resolvers = {
   Query: {
     async hero(root, { episode }, context) {
-      return await Character.find({ episode });
+      return await Character.find({ 
+        type: 'hero',
+        episode 
+      });
     },
+    // ...
   },
+  Mutation: { /* ... */ }
   Character: {
     async starships(character) {
-      // return from fetch intergalactic API ⛅
+      const res = await fetch(\`
+        https://api.starships.io/pilot/$\{character.id\}
+      \`);
+      return await res.json();
     }
-  },`}
+  },
+  // ...
+};`}
                     textSize={18}
                   />
                 </TableItem>
               </TableRow>
             </TableBody>
           </Table>
+        </Slide>
+        <Slide transition={["fade"]}>
+          {/*<AnimatedGraphQL size="40vw" />*/}
+          <Image src={images.twitter} />
         </Slide>
         <Slide transition={["fade"]}>
           <Heading size={3} lineHeight={1} textColor="grey" margin="0 0 40px 0">
@@ -361,30 +470,61 @@ type Character {
                 <TableItem>
                   <Image width="200px" height="200px" src={images.apollo} />
                 </TableItem>
-                <TableItem>
-                  <Image width="200px" height="200px" src={images.kadira} />
-                </TableItem>
+                {/*
+                  // note:
+                  // won't talk about it to not confuse the audience
+                  // big up for all your work, Kadira team 🎩
+                  <TableItem>
+                    <Image width="200px" height="200px" src={images.kadira} />
+                  </TableItem>
+                */}
               </TableRow>
               <TableRow>
                 <TableItem textColor="#F26B00">Relay</TableItem>
                 <TableItem textColor="#22A699">Apollo</TableItem>
-                <TableItem textColor="#FCFCFC">Lokka</TableItem>
+                {/*
+                  <TableItem textColor="#FCFCFC">Lokka</TableItem>
+                */}
               </TableRow>
             </TableBody>
           </Table>
         </Slide>
         {this.props.data.clientBenefits.map((benefit, index) => (
-          <Slide key={`benefit-slide-${index}`} transition={["fade"]}>
-            <Heading size={3} lineHeight={1} textColor="magenta">
-              {benefit.value}
-            </Heading>
+          <Slide transition={["fade"]} key={`benefit-slide-${index}`}>
+            <Heading fit textColor="magenta">{benefit.value}</Heading>
           </Slide>
         ))}
         <Slide transition={["fade"]}>
-          <AnimatedGraphQL size="10vw" />
+          <Heading
+            size={3}
+            textColor="magenta"
+            lineHeight={1}
+            margin="0 0 40px 0"
+          >
+            <span
+              className="rocket-refetch"
+              onClick={() => {
+                this.props.data
+                  .refetch()
+                  .then(res => {
+                    console.log("yeah", res);
+                    // 🙄
+                    const [, index] = window.location.hash.split("#/");
+                    window.location.hash = `#/${Number(index) + 1}`;
+                  })
+                  .catch(e => console.log("oh", e));
+              }}
+            >
+              🚀
+            </span>
+          </Heading>
           <List>
             {this.props.data.clientBenefits.map((benefit, index) => (
-              <ListItem textColor="magenta" key={`list-benefit-${index}`}>
+              <ListItem
+                textColor="magenta"
+                textSize="3rem"
+                key={`benefit-list-${index}`}
+              >
                 {benefit.value}
               </ListItem>
             ))}
@@ -436,11 +576,13 @@ type Character {
           </Heading>
         </Slide>
         <Slide transition={["fade"]}>
-          <Heading size={1} lineHeight={1} textColor="mediumseagreen">
+          <Heading size={1} textColor="mediumseagreen" margin="0 0 40px 0">
             Takeaways
           </Heading>
-          <Heading size={3} lineHeight={1} textColor="mediumseagreen">
-            Launchpad
+          <Heading fit>
+            <a href="https://launchpad.graphql.com/kzxv94v37" target="_blank">
+              https://launchpad.graphql.com/kzxv94v37
+            </a>
           </Heading>
         </Slide>
         <Slide transition={["fade"]}>
@@ -482,14 +624,6 @@ type Character {
               ))}
             </TableBody>
           </Table>
-        </Slide>
-        <Slide transition={["fade"]}>
-          <Link href="https://www.okgrow.com" target="_blank">
-            <Image src={images.okgrow} height="156px" width="606px" />
-          </Link>
-          <Heading fit lineHeight={1} textColor="cyan">
-            I use GraphQL at my company
-          </Heading>
         </Slide>
         <Slide transition={["fade"]}>
           <Heading size={1} lineHeight={1}>
