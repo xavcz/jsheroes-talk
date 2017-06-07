@@ -36,7 +36,9 @@ const images = {
   schema2: require("../assets/schema-2.png"),
   schema3: require("../assets/schema-3.png"),
   schema4: require("../assets/schema-4.png"),
-  twitter: require("../assets/twitter.png")
+  // twitter: require("../assets/twitter.png"),
+  // 🤓
+  life: require("../assets/42.png")
 };
 
 preloader(images);
@@ -83,6 +85,7 @@ const arrayToRows = array =>
     [[], [], []]
   );
 
+// in a real world app, this wouldn't be one giant component of 600 loc 🤣
 class Presentation extends React.Component {
   render() {
     if (this.props.data.loading) {
@@ -249,7 +252,8 @@ class Presentation extends React.Component {
     }
   }
 }`}
-              url="https://78nq9535j.lp.gql.zone/graphql"
+              // url="https://78nq9535j.lp.gql.zone/graphql"
+              url="http://localhost:9009/graphql"
             />
           </div>
         </Slide>
@@ -362,7 +366,7 @@ type Character {
             margin="0 0 20px 0"
             textColor="magenta"
           >
-            GraphQL Server 🤔
+            GraphQL Server
           </Heading>
           <Table>
             <TableBody>
@@ -426,14 +430,47 @@ type Character {
           </Table>
         </Slide>
         <Slide transition={["fade"]}>
-          {/*<AnimatedGraphQL size="40vw" />*/}
-          <Image src={images.twitter} />
+          <Heading size={3} lineHeight={1}>
+            🤔
+          </Heading>
+          <List textColor="magenta">
+            {this.props.data.graphQLBenefits.map(benefit => (
+              <ListItem
+                textSize="2.7rem"
+                margin="0 0 20px"
+                key={`benefits-list-${benefit.id}`}
+              >
+                {benefit.value}
+              </ListItem>
+            ))}
+          </List>
+        </Slide>
+        <Slide transition={["fade"]}>
+          <Heading size={3} lineHeight={1} textColor="grey" margin="0 0 20px 0">
+            🛰
+          </Heading>
+          <CodePane
+            lang="graphql"
+            source={`# My query for my awesome Star Wars app
+query heroWithTwoHands {
+  hero(episode: EMPIRE) {
+    name
+    starships {
+      name
+    }
+    friends {
+      name
+      starships {
+        name
+      }
+    }
+  }
+}`}
+            textSize={22}
+          />
         </Slide>
         <Slide transition={["fade"]}>
           <Heading size={3} lineHeight={1} textColor="grey" margin="0 0 40px 0">
-            fetch() is fine
-          </Heading>
-          <Heading size={5} lineHeight={1} textColor="grey" margin="0 0 40px 0">
             🙂
           </Heading>
           <CodePane
@@ -489,9 +526,12 @@ type Character {
             </TableBody>
           </Table>
         </Slide>
-        {this.props.data.clientBenefits.map((benefit, index) => (
-          <Slide transition={["fade"]} key={`benefit-slide-${index}`}>
-            <Heading fit textColor="magenta">{benefit.value}</Heading>
+        {this.props.data.clientFeatures.map(feature => (
+          <Slide transition={["fade"]} key={`feature-slide-${feature.id}`}>
+            <Heading size={3} textColor="magenta">{feature.key}</Heading>
+            <Heading size={5} textColor="magenta">
+              {feature.description}
+            </Heading>
           </Slide>
         ))}
         <Slide transition={["fade"]}>
@@ -519,13 +559,13 @@ type Character {
             </span>
           </Heading>
           <List>
-            {this.props.data.clientBenefits.map((benefit, index) => (
+            {this.props.data.clientFeatures.map(feature => (
               <ListItem
                 textColor="magenta"
                 textSize="3rem"
-                key={`benefit-list-${index}`}
+                key={`feature-list-${feature.id}`}
               >
-                {benefit.value}
+                {feature.key}
               </ListItem>
             ))}
           </List>
@@ -560,30 +600,49 @@ type Character {
           </Table>
         </Slide>
         <Slide transition={["fade"]}>
+          <Heading fit lineHeight={1} textColor="gold" margin="0 0 40px 0">
+            Easier developer life
+          </Heading>
           <Heading size={1} lineHeight={1}>
             ✨
           </Heading>
-          <Heading size={3} lineHeight={1} textColor="gold">
-            Easier developer life
-          </Heading>
+          <Image
+            src={images.life}
+            style={{ paddingRight: "24px" /* sketch fail */ }}
+          />
         </Slide>
         <Slide transition={["fade"]}>
-          <Heading size={1} lineHeight={1}>
-            🤓
-          </Heading>
-          <Heading size={3} lineHeight={1} textColor="gold">
+          <Heading fit lineHeight={1} textColor="gold" margin="0 0 80px 0">
             Incrementally adoptable
           </Heading>
+          <Heading size={1} lineHeight={1}>
+            🍰
+          </Heading>
         </Slide>
         <Slide transition={["fade"]}>
-          <Heading size={1} textColor="mediumseagreen" margin="0 0 40px 0">
-            Takeaways
-          </Heading>
-          <Heading fit>
+          <Heading fit margin="0 0 40px 0">
             <a href="https://launchpad.graphql.com/kzxv94v37" target="_blank">
               https://launchpad.graphql.com/kzxv94v37
             </a>
           </Heading>
+          <CodePane
+            lang="graphql"
+            source={`query takeaways {
+  whyShouldICare {
+    whatIsGraphQL 
+      # A query language for your API (think gateway?)
+  	benefitsOfUsingGraphQL 
+      # 1 req for n resources, no over-fetching, type system, ...
+    whyAClient 
+      # caching, consistency, responsiveness, ...
+    howToGetStarted
+      # http://graphql.org
+      # https://learnapollo.com
+      # http://launchpad.graphql.com
+  }
+}`}
+            textSize={22}
+          />
         </Slide>
         <Slide transition={["fade"]}>
           <Heading
@@ -640,15 +699,21 @@ type Character {
 
 export default graphql(
   gql`
+  # in a real world app, this would be spared in several queries
   query getSlidesData {
+    graphQLBenefits {
+      id
+      value
+    }
+    clientFeatures {
+      id
+      key
+      description
+    }
     heroes {
       id
       username
       avatar
-    }
-    clientBenefits {
-      id
-      value
     }
   }
 `
