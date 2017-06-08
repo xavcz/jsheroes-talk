@@ -436,7 +436,7 @@ type Character {
           <List textColor="magenta">
             {this.props.data.graphQLBenefits.map(benefit => (
               <ListItem
-                textSize="2.7rem"
+                textSize="2rem"
                 margin="0 0 20px"
                 key={`benefits-list-${benefit.id}`}
               >
@@ -529,7 +529,7 @@ query heroWithTwoHands {
         {this.props.data.clientFeatures.map(feature => (
           <Slide transition={["fade"]} key={`feature-slide-${feature.id}`}>
             <Heading size={3} textColor="magenta">{feature.key}</Heading>
-            <Heading size={5} textColor="magenta">
+            <Heading size={5} textColor="cyan">
               {feature.description}
             </Heading>
           </Slide>
@@ -579,7 +579,7 @@ query heroWithTwoHands {
           >
             Ecosystem
           </Heading>
-          <Heading size={1} lineHeight={1} margin="0 0 40px 0">
+          <Heading size={1} lineHeight={1} textColor="gold" margin="0 0 40px 0">
             is DOPE
           </Heading>
           <Table>
