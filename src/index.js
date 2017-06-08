@@ -252,8 +252,8 @@ class Presentation extends React.Component {
     }
   }
 }`}
-              // url="https://78nq9535j.lp.gql.zone/graphql"
-              url="http://localhost:9009/graphql"
+              url="https://78nq9535j.lp.gql.zone/graphql"
+              // url="http://localhost:9009/graphql"
             />
           </div>
         </Slide>
