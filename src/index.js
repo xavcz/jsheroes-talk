@@ -100,7 +100,7 @@ class Presentation extends React.Component {
             alignItems: "center"
           }}
         >
-          <AnimatedGraphQL />
+          <AnimatedGraphQL animated />
         </div>
       );
     }
@@ -113,6 +113,12 @@ class Presentation extends React.Component {
         bgColor="primary"
         progress="none"
       >
+        <Slide transition={["fade"]}>
+          <Heading size={3} textColor="magenta" margin="0 0 80px">
+            Why you should care about GraphQL
+          </Heading>
+          <AnimatedGraphQL size="20vw" animated />
+        </Slide>
         <Slide transition={["fade"]}>
           <Heading size={1} lineHeight={1}>
             👋

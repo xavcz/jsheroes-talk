@@ -13,8 +13,8 @@ import Presentation from "./src";
 
 const client = new ApolloClient({
   networkInterface: createNetworkInterface({
-    // uri: "https://kzxv94v37.lp.gql.zone/graphql"
-    uri: "http://localhost:7007/graphql",
+    uri: "https://kzxv94v37.lp.gql.zone/graphql",
+    // uri: "http://localhost:7007/graphql",
     headers: {
       mode: "no-cors"
     }
