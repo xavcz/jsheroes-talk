@@ -169,14 +169,6 @@ class Presentation extends React.Component {
           </Heading>
         </Slide>
         <Slide transition={["fade"]}>
-          <Heading size={1} lineHeight={1} textColor="grey">
-            JS Heroes
-          </Heading>
-          <Heading size={3} lineHeight={1} textColor="grey">
-            ⚙️
-          </Heading>
-        </Slide>
-        <Slide transition={["fade"]}>
           <Heading size={1} lineHeight={1} textColor="gold">
             SW Heroes
           </Heading>
